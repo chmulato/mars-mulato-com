@@ -14,6 +14,11 @@ import com.mulato.mars.service.PosicaoService;
 @RequestMapping("/rest")
 public class PosicaoController {
 
+	/**
+	 * Robo Gigante de Ferro
+	 */
+	final private Long roboGiganteDeFerro = Long.valueOf("l"); 
+	
 	@Autowired
 	private PosicaoService posicaoService;
 
@@ -24,9 +29,9 @@ public class PosicaoController {
 		return mv;
 	}
 
-	@GetMapping("mars/{codigo}")
+	@GetMapping("mars/{parametro}")
 	public ModelAndView editar(@PathVariable String parametro) {
-		Posicao posicao = posicaoService.deslocarPara(parametro);
+		Posicao posicao = posicaoService.deslocarPara(parametro, roboGiganteDeFerro);
 		return novo(posicao);
 	}
 
