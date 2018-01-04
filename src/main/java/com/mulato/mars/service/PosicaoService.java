@@ -35,7 +35,10 @@ public class PosicaoService {
 		else {
 			int tamanho = parametro.length();
 			for (int i = 0; i < tamanho; i++) {
-				String valor = parametro.substring(i, i + 1);
+				String valor = parametro.substring(i, i + 1).toUpperCase();
+				if ((valor == null) || ((!valor.equals("M")) && (!valor.equals("L")) && (!valor.equals("R")))) {
+					throw new ValorInvalidoException("Valor Inválido!");
+				}
 			}
 		}
 		
