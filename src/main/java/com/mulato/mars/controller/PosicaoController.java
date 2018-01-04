@@ -9,6 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mulato.mars.model.Posicao;
 import com.mulato.mars.service.PosicaoService;
+import com.mulato.mars.service.exception.AreaInvalidaException;
+import com.mulato.mars.service.exception.ParametroInvalidoException;
 
 @Controller
 @RequestMapping("/rest")
@@ -31,7 +33,14 @@ public class PosicaoController {
 
 	@GetMapping("mars/{parametro}")
 	public ModelAndView editar(@PathVariable String parametro) {
-		Posicao posicao = posicaoService.deslocarPara(parametro, roboGiganteDeFerro);
+		Posicao posicao = null;
+		try {
+			posicao = posicaoService.deslocarPara(parametro, roboGiganteDeFerro);
+		} catch (ParametroInvalidoException ex) {
+			ex.printStackTrace();
+		} catch (AreaInvalidaException ex) {
+			ex.printStackTrace();
+		}
 		return novo(posicao);
 	}
 

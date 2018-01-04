@@ -7,10 +7,16 @@ import com.mulato.mars.model.Posicao;
 import com.mulato.mars.model.Robo;
 import com.mulato.mars.repository.PosicaoRepository;
 import com.mulato.mars.repository.RoboRepository;
+import com.mulato.mars.service.exception.AreaInvalidaException;
 import com.mulato.mars.service.exception.ParametroInvalidoException;
 
 @Service
 public class PosicaoService {
+
+	/**
+	 * Área Máxima Permitida
+	 */
+	final private int areaMaximaPermitida = 5; 
 
 	@Autowired
 	private RoboRepository roboRepository;
@@ -25,7 +31,7 @@ public class PosicaoService {
 	 * @param codigo
 	 * @return
 	 */
-	public Posicao deslocarPara(String parametro, Long codigo) throws ParametroInvalidoException {
+	public Posicao deslocarPara(String parametro, Long codigo) throws ParametroInvalidoException, AreaInvalidaException {
 		
 		Posicao posicao = null;
 		
@@ -40,19 +46,28 @@ public class PosicaoService {
 				throw new ParametroInvalidoException("Robo Inválido!");
 			}
 			
-			int tamanho = parametro.length();
-
-			for (int i = 0; i < tamanho; i++) {
-				String valor = parametro.substring(i, i + 1).toUpperCase();
-				if ((valor == null) || ((!valor.equals("M")) && (!valor.equals("L")) && (!valor.equals("R")))) {
-					throw new ParametroInvalidoException("Parâmetro Inválido!");
-				}
-			}
+			validarRequisicao(parametro);
 		}
 		
 		posicao = posicaoRepository.findOne(codigo);
-		return novaPosicao(posicao);
+		posicao = calcularNovaPosicao(posicao, parametro);
+		return salvarPosicao(posicao);
 
+	}
+
+	/**
+	 * Método para validar parâmetros da requisição GET
+	 * 
+	 * @param parametro
+	 */
+	private void validarRequisicao(String parametro) {
+		int tamanho = parametro.length();
+		for (int i = 0; i < tamanho; i++) {
+			String valor = parametro.substring(i, i + 1).toUpperCase();
+			if ((valor == null) || ((!valor.equals("M")) && (!valor.equals("L")) && (!valor.equals("R")))) {
+				throw new ParametroInvalidoException("Parâmetro Inválido!");
+			}
+		}
 	}
 	
 	/**
@@ -73,14 +88,86 @@ public class PosicaoService {
 	}
 	
 	/**
-	 * Método para calcular a nova posição do robô
+	 * Método para sava a nova posição do robô
 	 * 
 	 * @param posicao
 	 * @return
 	 * @throws ParametroInvalidoException
 	 */
-	private Posicao novaPosicao(Posicao posicao) throws ParametroInvalidoException {
+	private Posicao salvarPosicao(Posicao posicao) throws ParametroInvalidoException {
+		posicaoRepository.save(posicao);
 		return posicao;
 	}
 	
-}
+	/**
+	 * Método para calcular a nova posição do robô 
+	 * 
+	 * @param posicao
+	 * @param parametro
+	 * @return
+	 */
+	private Posicao calcularNovaPosicao(Posicao posicao, String parametro) throws AreaInvalidaException {
+		
+		int tamanho = parametro.length();
+		int x = posicao.getCoordX();
+		int y = posicao.getCoordY();
+		char cardeal = posicao.getPontoCardeal().charValue();
+
+		// regra para movimentação do robô
+		for (int i = 0; i < tamanho; i++) {
+			char passo = parametro.substring(i, i + 1).toUpperCase().charAt(0);
+			switch (passo) {
+			case 'L':
+				if (cardeal == 'N') {
+					cardeal = 'W';
+				} else if (cardeal == 'W') {
+					cardeal = 'S';
+				} else if (cardeal == 'S') {
+					cardeal = 'E';
+				} else if (cardeal == 'E') {
+					cardeal = 'N';
+				}
+				break;
+			case 'R':
+				if (cardeal == 'N') {
+					cardeal = 'E';
+				} else if (cardeal == 'E') {
+					cardeal = 'S';
+				} else if (cardeal == 'S') {
+					cardeal = 'W';
+				} else if (cardeal == 'W') {
+					cardeal = 'N';
+				}
+				break;
+			case 'M':
+				if (cardeal == 'N') {
+					x = x + 1;
+				} else if (cardeal == 'S') {
+					x = x - 1;
+				} else if (cardeal == 'E') {
+					y = y + 1;
+				} else if (cardeal == 'W') {
+					y = y - 1;
+				}
+				break;
+			
+			} // end switch
+		
+		} // end for
+
+		if ((x > areaMaximaPermitida) || (x < 0)) {
+			throw new AreaInvalidaException("Área Inválida!");
+		}
+
+		if ((y > areaMaximaPermitida) || (y < 0)) {
+			throw new AreaInvalidaException("Área Inválida!");
+		}
+		
+		posicao.setCoordX(x);
+		posicao.setCoordY(y);
+		posicao.setPontoCardeal(cardeal);
+		return posicao;
+	}
+	
+}	
+	
