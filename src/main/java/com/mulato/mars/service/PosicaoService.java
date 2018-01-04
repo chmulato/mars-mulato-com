@@ -1,5 +1,7 @@
 package com.mulato.mars.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,15 @@ public class PosicaoService {
 	private PosicaoRepository posicaoRepository;
 
 	
+	/**
+	 * Lista de todas as coordenadas existentes
+	 * 
+	 * @return
+	 */
+	public List<Posicao> listar() {
+		return posicaoRepository.findAll();
+	}
+
 	/**
 	 * Método publico para recuperar posicao por código
 	 * 
@@ -61,10 +72,10 @@ public class PosicaoService {
 	 * @param parametro
 	 */
 	private void validarRequisicao(String parametro) {
-		int tamanho = parametro.length();
-		for (int i = 0; i < tamanho; i++) {
-			String valor = parametro.substring(i, i + 1).toUpperCase();
-			if ((valor == null) || ((!valor.equals("M")) && (!valor.equals("L")) && (!valor.equals("R")))) {
+		String parametros = parametro.trim().toUpperCase();
+		for (int i = 0; i < parametros.length(); i++) {
+			char valor = parametros.charAt(i);		
+			if ((valor != 'M') && (valor != 'L') && (valor != 'R')) {
 				throw new ParametroInvalidoException("Parâmetro Inválido!");
 			}
 		}
@@ -108,14 +119,14 @@ public class PosicaoService {
 	 */
 	private Posicao calcularNovaPosicao(Posicao posicao, String parametro) throws AreaInvalidaException {
 		
-		int tamanho = parametro.length();
 		int x = posicao.getCoordX();
 		int y = posicao.getCoordY();
 		char cardeal = posicao.getPontoCardeal().charValue();
+		parametro = parametro.trim().toUpperCase();
 
 		// regra para movimentação do robô
-		for (int i = 0; i < tamanho; i++) {
-			char passo = parametro.substring(i, i + 1).toUpperCase().charAt(0);
+		for (int i = 0; i < parametro.length(); i++) {
+			char passo = parametro.charAt(i);
 			switch (passo) {
 			case 'L':
 				if (cardeal == 'N') {

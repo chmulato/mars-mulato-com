@@ -26,6 +26,13 @@ public class Posicao {
 		super();
 	}
 
+	public Posicao(Integer coordX, Integer coordY, Character pontoCardeal) {
+		super();
+		this.coordX = coordX;
+		this.coordY = coordY;
+		this.pontoCardeal = pontoCardeal;
+	}
+
 	public Long getCodigo() {
 		return codigo;
 	}
