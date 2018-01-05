@@ -21,8 +21,6 @@ import com.mulato.mars.service.exception.ParametroInvalidoException;
 @RequestMapping("/rest")
 public class PosicaoResources {
 
-	final private Long roboGiganteDeFerro = Long.valueOf("l"); 
-	
 	@Autowired
 	private PosicaoService posicaoService;
 
@@ -37,7 +35,7 @@ public class PosicaoResources {
 		Posicao posicao = null;
 		
 		try {
-			posicao = posicaoService.deslocarPara(parametro, roboGiganteDeFerro);
+			posicao = posicaoService.deslocarPara(parametro, Long.valueOf(1));
 		} catch (ParametroInvalidoException ex) {
 			posicao = new Posicao(0,0,"N");
 		} catch (AreaInvalidaException ex) {
