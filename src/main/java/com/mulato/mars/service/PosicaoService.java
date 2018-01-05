@@ -54,7 +54,7 @@ public class PosicaoService {
 			Robo robo = roboEmMissao(codigo);
 			
 			if (robo == null) {
-				throw new ParametroInvalidoException("Robo Inválido!");
+				throw new ParametroInvalidoException("Robô Inválido!");
 			}
 			
 			validarRequisicao(parametro);
