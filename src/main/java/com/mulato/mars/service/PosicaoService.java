@@ -152,13 +152,13 @@ public class PosicaoService {
 				break;
 			case 'M':
 				if (cardeal == 'N') {
-					x = x + 1;
-				} else if (cardeal == 'S') {
-					x = x - 1;
-				} else if (cardeal == 'E') {
 					y = y + 1;
-				} else if (cardeal == 'W') {
+				} else if (cardeal == 'S') {
 					y = y - 1;
+				} else if (cardeal == 'E') {
+					x = x + 1;
+				} else if (cardeal == 'W') {
+					x = x - 1;
 				}
 				break;
 			

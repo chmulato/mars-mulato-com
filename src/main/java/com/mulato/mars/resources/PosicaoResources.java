@@ -37,9 +37,9 @@ public class PosicaoResources {
 		try {
 			posicao = posicaoService.deslocarPara(parametro, Long.valueOf(1));
 		} catch (ParametroInvalidoException ex) {
-			posicao = new Posicao(0,0,"N");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("400 Bad Request");
 		} catch (AreaInvalidaException ex) {
-			posicao = new Posicao(0,0,"N");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("400 Bad Request");
 		}
 		
 		CacheControl cacheControl = CacheControl.maxAge(20, TimeUnit.SECONDS);
