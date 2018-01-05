@@ -20,17 +20,17 @@ public class Posicao {
 	private Integer coordY;
 	
 	@NotNull(message = "O ponto cardeal é obrigatório!")
-	private Character pontoCardeal;
+	private String cardeal;
 
 	public Posicao() {
 		super();
 	}
 
-	public Posicao(Integer coordX, Integer coordY, Character pontoCardeal) {
+	public Posicao(Integer coordX, Integer coordY, String cardeal) {
 		super();
 		this.coordX = coordX;
 		this.coordY = coordY;
-		this.pontoCardeal = pontoCardeal;
+		this.cardeal = cardeal;
 	}
 
 	public Long getCodigo() {
@@ -57,12 +57,12 @@ public class Posicao {
 		this.coordY = coordY;
 	}
 
-	public Character getPontoCardeal() {
-		return pontoCardeal;
+	public String getCardeal() {
+		return cardeal;
 	}
 
-	public void setPontoCardeal(Character pontoCardeal) {
-		this.pontoCardeal = pontoCardeal;
+	public void setCardeal(String cardeal) {
+		this.cardeal = cardeal;
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class Posicao {
 		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
 		result = prime * result + ((coordX == null) ? 0 : coordX.hashCode());
 		result = prime * result + ((coordY == null) ? 0 : coordY.hashCode());
-		result = prime * result + ((pontoCardeal == null) ? 0 : pontoCardeal.hashCode());
+		result = prime * result + ((cardeal == null) ? 0 : cardeal.hashCode());
 		return result;
 	}
 
@@ -100,10 +100,10 @@ public class Posicao {
 				return false;
 		} else if (!coordY.equals(other.coordY))
 			return false;
-		if (pontoCardeal == null) {
-			if (other.pontoCardeal != null)
+		if (cardeal == null) {
+			if (other.cardeal != null)
 				return false;
-		} else if (!pontoCardeal.equals(other.pontoCardeal))
+		} else if (!cardeal.equals(other.cardeal))
 			return false;
 		return true;
 	}

@@ -121,7 +121,7 @@ public class PosicaoService {
 		
 		int x = posicao.getCoordX();
 		int y = posicao.getCoordY();
-		char cardeal = posicao.getPontoCardeal().charValue();
+		char cardeal = posicao.getCardeal().charAt(0);
 		parametro = parametro.trim().toUpperCase();
 
 		// regra para movimentação do robô
@@ -176,7 +176,7 @@ public class PosicaoService {
 		
 		posicao.setCoordX(x);
 		posicao.setCoordY(y);
-		posicao.setPontoCardeal(cardeal);
+		posicao.setCardeal(String.valueOf(cardeal));
 		return posicao;
 	}
 	
